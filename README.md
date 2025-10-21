@@ -1,5 +1,5 @@
 # SnapWebs
-### -micro service websites
+### - micro service websites
 SnapWebs – Small Service Websites
 
 ### What It Is:
