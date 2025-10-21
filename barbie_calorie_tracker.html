@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Barbie Calorie Deficit Calculator</title>
+<style>
+  :root {
+    --pink-1: #ff66b2;
+    --pink-2: #ff2d95;
+    --bg: #ffdff0;
+    --card: #fff;
+    --accent: #ff4da6;
+    --muted: #7a3b56;
+  }
+  html, body {
+    margin: 0; padding: 0; height: 100%; font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, var(--bg), #ffe0f3 60%);
+  }
+  body {
+    display: flex; flex-direction: column; align-items: center; padding: 32px;
+  }
+  .wrap {
+    max-width: 1100px; width: 100%;
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center;
+  }
+  .title {
+    grid-column: 1/-1; text-align: center; margin-bottom: 16px;
+  }
+  h1 {
+    margin: 0; font-size: 40px; color: var(--pink-2);
+    text-shadow: 0 2px 0 rgba(255,255,255,0.6);
+  }
+  h2 {
+    margin: 6px 0 0; font-size: 14px; color: var(--muted);
+  }
+  .card {
+    background: var(--card); border-radius: 18px; padding: 22px;
+    box-shadow: 0 10px 30px rgba(170,30,90,0.12);
+  }
+  .inputs {
+    display: flex; flex-direction: column; gap: 12px; width: 320px;
+  }
+  label { font-size: 13px; color: #7a3b56; }
+  input[type=number], select {
+    padding: 10px; border-radius: 8px; border: 1px solid #f0c0d8; font-size: 14px;
+  }
+  select { max-width: 100%; }
+  .row { display: flex; gap: 8px; }
+  .small { flex: 1; }
+  .btn {
+    background: var(--accent); color: white; padding: 10px 14px;
+    border-radius: 10px; border: 0; font-weight: 700; cursor: pointer;
+  }
+  .btn.reset { background: #ffb4d9; color: #6b2140; }
+  .result { width: 340px; }
+  .result .big { font-weight: 900; font-size: 30px; color: var(--pink-2); }
+  .muted { color: #8a536e; font-size: 13px; }
+  .equals {
+    font-size: 96px; line-height: 0.7; color: var(--pink-2);
+    display: flex; align-items: center; justify-content: center; transform: scaleY(6);
+  }
+  footer {
+    margin-top: 40px; text-align: center;
+    color: var(--pink-2); font-size: 14px; font-weight: bold;
+  }
+  .note { font-size: 13px; color: #6b3a54; margin-top: 8px; }
+
+  @media (max-width: 900px){
+    .wrap { grid-template-columns: 1fr; }
+    .equals { transform: scaleY(4); font-size: 72px; margin: 6px 0; }
+    .inputs, .result { width: 100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title">
+      <h1>Barbie Calorie Deficit Calculator</h1>
+      <h2>Pretty. Pink. Practical.</h2>
+    </div>
+
+    <div class="card inputs">
+      <label>Sex</label>
+      <select id="sex">
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+      </select>
+
+      <div class="row">
+        <div class="small">
+          <label>Age (years)</label>
+          <input type="number" id="age" value="21" min="10" max="120">
+        </div>
+        <div class="small">
+          <label>Weight (kg)</label>
+          <input type="number" id="weight" value="45" min="20" max="300">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="small">
+          <label>Height (cm)</label>
+          <input type="number" id="height" value="152" min="80" max="250">
+        </div>
+        <div class="small">
+          <label>Activity</label>
+          <select id="activity">
+            <option value="1.2">Sedentary</option>
+            <option value="1.375">Light (1–3x/wk)</option>
+            <option value="1.55" selected>Moderate (3–5x/wk)</option>
+            <option value="1.725">Very active</option>
+            <option value="1.9">Super active</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Goal / Deficit</label>
+      <select id="deficit">
+        <option value="0">No deficit (0 kcal)</option>
+        <option value="250">Mild (-250 kcal)</option>
+        <option value="500" selected>Moderate (-500 kcal)</option>
+        <option value="750">Aggressive (-750 kcal)</option>
+      </select>
+
+      <div style="display:flex;gap:8px;margin-top:6px;align-items:center">
+        <button class="btn" id="calculateBtn">Calculate</button>
+        <button class="btn reset" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="note">Tip: For sustainable fat loss aim for 250–500 kcal deficit. Don't go under 1200 kcal unless supervised.</div>
+    </div>
+
+    <div class="equals">=</div>
+
+    <div class="card result">
+      <div>
+        <div class="muted">Basal Metabolic Rate (BMR)</div>
+        <div class="big" id="bmr">— kcal/day</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="muted">Total Daily Energy Expenditure (TDEE)</div>
+        <div class="big" id="tdee">— kcal/day</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="muted">Recommended calories (after deficit)</div>
+        <div class="big" id="target">— kcal/day</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="muted">Estimated weekly weight change</div>
+        <div id="weekly">— /week</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="muted">Macro guideline (approx.)</div>
+        <div id="macros">—</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Made with 💖 — Positive Attitude Changes Everything!</footer>
+
+<script>
+function calcBMR(sex, weight, height, age){
+  if(sex === 'female'){
+    return Math.round(10*weight + 6.25*height - 5*age - 161);
+  } else {
+    return Math.round(10*weight + 6.25*height - 5*age + 5);
+  }
+}
+function format(n){ return Math.round(n) + ' kcal'; }
+
+function compute(){
+  const sex = document.getElementById('sex').value;
+  const age = Number(document.getElementById('age').value);
+  const weight = Number(document.getElementById('weight').value);
+  const height = Number(document.getElementById('height').value);
+  const activity = Number(document.getElementById('activity').value) || 1.2;
+  const deficit = Number(document.getElementById('deficit').value) || 0;
+
+  if (!age || !weight || !height) {
+    document.getElementById('bmr').textContent = '— kcal/day';
+    document.getElementById('tdee').textContent = '— kcal/day';
+    document.getElementById('target').textContent = '— kcal/day';
+    document.getElementById('weekly').textContent = '— /week';
+    document.getElementById('macros').textContent = '—';
+    return;
+  }
+
+  const bmr = calcBMR(sex, weight, height, age);
+  const tdee = Math.round(bmr * activity);
+  let target = tdee - deficit;
+  if(target < 1100) target = Math.max(target, Math.round(0.8 * bmr));
+
+  const weekly_kcal = -deficit * 7;
+  const weekly_kg = (weekly_kcal / 7700).toFixed(2);
+
+  const protein_g = Math.round(1.6 * weight);
+  const protein_cal = protein_g * 4;
+  const fat_cal = Math.round(target * 0.25);
+  const fat_g = Math.round(fat_cal / 9);
+  const carb_cal = target - protein_cal - fat_cal;
+  const carb_g = Math.max(0, Math.round(carb_cal / 4));
+
+  document.getElementById('bmr').textContent = format(bmr);
+  document.getElementById('tdee').textContent = format(tdee);
+  document.getElementById('target').textContent = format(target);
+  document.getElementById('weekly').textContent = (weekly_kg<0? weekly_kg + ' kg (loss)': weekly_kg + ' kg');
+  document.getElementById('macros').textContent = `Protein ~ ${protein_g} g • Fat ~ ${fat_g} g • Carbs ~ ${carb_g} g`;
+}
+
+document.getElementById('calculateBtn').addEventListener('click', compute);
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  document.getElementById('sex').value='female';
+  document.getElementById('age').value=0;
+  document.getElementById('weight').value=0;
+  document.getElementById('height').value=0;
+  document.getElementById('activity').value=1.2;
+  document.getElementById('deficit').value='0';
+  compute();
+});
+compute();
+</script>
+</body>
+</html>

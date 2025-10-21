@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barbie Planner</title>
+<style>
+  :root {
+    --pink-light: #ffd1e8;
+    --pink-dark: #ff66b2;
+    --accent: #ff2d95;
+    --bg: #fff0f8;
+    --text: #7a3b56;
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center; /* center vertically */
+  }
+  .container {
+    background-color: var(--pink-light);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(255, 77, 166, 0.2);
+    width: 450px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  h1 { color: var(--pink-dark); text-shadow: 1px 1px 2px #fff; margin-bottom: 15px; }
+  button {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+  }
+  button:hover { transform: scale(1.05); }
+  input[type="text"], textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #f0c0d8;
+    font-size: 14px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  ul { list-style-type: none; padding: 0; max-height: 250px; overflow-y: auto; margin-bottom: 10px; }
+  li {
+    background-color: #fff;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+  }
+  li.completed { text-decoration: line-through; opacity: 0.6; }
+  .delete-btn {
+    background-color: #ffb4d9;
+    border: none;
+    padding: 3px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #6b2140;
+  }
+  .delete-btn:hover { background-color: #ff99cc; }
+  #menu button { width: 45%; }
+  textarea { resize: none; height: 150px; }
+</style>
+</head>
+<body>
+
+<div class="container" id="menu">
+  <h1>💖 Barbie Planner 💖</h1>
+  <p>Choose your activity:</p>
+  <button onclick="showTodo()">New To-Do List</button>
+  <button onclick="showNotepad()">New Notepad</button>
+</div>
+
+<div id="plannerArea"></div>
+
+<script>
+const plannerArea = document.getElementById('plannerArea');
+let todos = JSON.parse(localStorage.getItem('barbieTodos')) || [];
+let notes = JSON.parse(localStorage.getItem('barbieNotes')) || [];
+
+function showMenu() {
+  plannerArea.innerHTML = '';
+  document.getElementById('menu').style.display = 'block';
+}
+
+function showTodo() {
+  document.getElementById('menu').style.display = 'none';
+  const todoDiv = document.createElement('div');
+  todoDiv.classList.add('container');
+
+  const titleInput = document.createElement('input');
+  titleInput.placeholder = 'To-Do List Title';
+  todoDiv.appendChild(titleInput);
+
+  const addTaskInput = document.createElement('input');
+  addTaskInput.placeholder = 'Add a new task...';
+  todoDiv.appendChild(addTaskInput);
+
+  const addTaskBtn = document.createElement('button');
+  addTaskBtn.textContent = 'Add Task';
+  todoDiv.appendChild(addTaskBtn);
+
+  const ul = document.createElement('ul');
+  todoDiv.appendChild(ul);
+
+  const saveBtn = document.createElement('button');
+  saveBtn.textContent = 'Save To-Do List';
+  todoDiv.appendChild(saveBtn);
+
+  const backBtn = document.createElement('button');
+  backBtn.textContent = '← Back';
+  backBtn.onclick = showMenu;
+  todoDiv.appendChild(backBtn);
+
+  addTaskBtn.onclick = () => {
+    const text = addTaskInput.value.trim();
+    if(text === '') return;
+    const li = document.createElement('li');
+    li.textContent = text;
+    li.addEventListener('click', () => li.classList.toggle('completed'));
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '✕';
+    delBtn.classList.add('delete-btn');
+    delBtn.onclick = (e) => { e.stopPropagation(); li.remove(); };
+    li.appendChild(delBtn);
+    ul.appendChild(li);
+    addTaskInput.value = '';
+  };
+
+  saveBtn.onclick = () => {
+    const listTitle = titleInput.value.trim() || 'Untitled';
+    const tasks = [];
+    ul.querySelectorAll('li').forEach(li => {
+      tasks.push({text: li.firstChild.textContent, completed: li.classList.contains('completed')});
+    });
+    todos.push({title: listTitle, tasks});
+    localStorage.setItem('barbieTodos', JSON.stringify(todos));
+    alert('To-Do List saved!');
+    showMenu();
+  };
+
+  plannerArea.appendChild(todoDiv);
+}
+
+function showNotepad() {
+  document.getElementById('menu').style.display = 'none';
+  const noteDiv = document.createElement('div');
+  noteDiv.classList.add('container');
+
+  const titleInput = document.createElement('input');
+  titleInput.placeholder = 'Note Title';
+  noteDiv.appendChild(titleInput);
+
+  const textarea = document.createElement('textarea');
+  noteDiv.appendChild(textarea);
+
+  const saveBtn = document.createElement('button');
+  saveBtn.textContent = 'Save Note';
+  noteDiv.appendChild(saveBtn);
+
+  const backBtn = document.createElement('button');
+  backBtn.textContent = '← Back';
+  backBtn.onclick = showMenu;
+  noteDiv.appendChild(backBtn);
+
+  saveBtn.onclick = () => {
+    const noteTitle = titleInput.value.trim() || 'Untitled';
+    const content = textarea.value;
+    notes.push({title: noteTitle, content});
+    localStorage.setItem('barbieNotes', JSON.stringify(notes));
+    alert('Note saved!');
+    showMenu();
+  };
+
+  plannerArea.appendChild(noteDiv);
+}
+</script>
+
+</body>
+</html>
+    

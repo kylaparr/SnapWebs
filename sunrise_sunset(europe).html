@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>European Sunrise & Sunset Tracker ☀️</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 50%, #fbc2eb 100%);
+    background-size: 400% 400%;
+    animation: skyShift 10s ease-in-out infinite alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Poppins", sans-serif;
+  }
+
+  @keyframes skyShift {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 28px;
+    border-radius: 24px;
+    text-align: center;
+    color: #fff;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 0 30px rgba(255, 200, 150, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 8px rgba(255,255,255,0.8);
+  }
+
+  select, button {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+  }
+
+  select {
+    width: 100%;
+    background: rgba(255,255,255,0.8);
+    color: #333;
+  }
+
+  button {
+    margin-top: 10px;
+    width: 100%;
+    background: linear-gradient(90deg, #ff9966, #ff5e62);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    transform: scale(1.03);
+    background: linear-gradient(90deg, #ff5e62, #ff9966);
+  }
+
+  #result {
+    margin-top: 18px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    background: rgba(255,255,255,0.25);
+    border-radius: 14px;
+    padding: 12px;
+    text-shadow: 0 0 8px rgba(255,255,255,0.5);
+  }
+
+  .note {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  .sun-icon {
+    font-size: 2rem;
+    display: inline-block;
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 10px #fff, 0 0 20px #ffcc00; }
+    to { text-shadow: 0 0 20px #ffcc00, 0 0 30px #ffd966; }
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2>🌅 European Sunrise & Sunset</h2>
+
+    <select id="countrySelect">
+      <option value="">-- Select Country (Major City) --</option>
+      <option value="[48.2082,16.3738]">Austria (Vienna)</option>
+      <option value="[50.8503,4.3517]">Belgium (Brussels)</option>
+      <option value="[43.8563,18.4131]">Bosnia & Herzegovina (Sarajevo)</option>
+      <option value="[42.6977,23.3219]">Bulgaria (Sofia)</option>
+      <option value="[45.8150,15.9819]">Croatia (Zagreb)</option>
+      <option value="[35.1856,33.3823]">Cyprus (Nicosia)</option>
+      <option value="[50.0755,14.4378]">Czech Republic (Prague)</option>
+      <option value="[55.6761,12.5683]">Denmark (Copenhagen)</option>
+      <option value="[59.4370,24.7536]">Estonia (Tallinn)</option>
+      <option value="[60.1699,24.9384]">Finland (Helsinki)</option>
+      <option value="[48.8566,2.3522]">France (Paris)</option>
+      <option value="[52.5200,13.4050]">Germany (Berlin)</option>
+      <option value="[37.9838,23.7275]">Greece (Athens)</option>
+      <option value="[47.4979,19.0402]">Hungary (Budapest)</option>
+      <option value="[64.1466,-21.9426]">Iceland (Reykjavik)</option>
+      <option value="[53.3498,-6.2603]">Ireland (Dublin)</option>
+      <option value="[41.9028,12.4964]">Italy (Rome)</option>
+      <option value="[56.9496,24.1052]">Latvia (Riga)</option>
+      <option value="[54.6872,25.2797]">Lithuania (Vilnius)</option>
+      <option value="[49.6117,6.1319]">Luxembourg (Luxembourg City)</option>
+      <option value="[35.8997,14.5146]">Malta (Valletta)</option>
+      <option value="[52.3676,4.9041]">Netherlands (Amsterdam)</option>
+      <option value="[59.9139,10.7522]">Norway (Oslo)</option>
+      <option value="[52.2297,21.0122]">Poland (Warsaw)</option>
+      <option value="[38.7223,-9.1393]">Portugal (Lisbon)</option>
+      <option value="[45.9432,24.9668]">Romania (Bucharest)</option>
+      <option value="[55.7558,37.6176]">Russia (Moscow)</option>
+      <option value="[44.4268,26.1025]">Serbia (Belgrade)</option>
+      <option value="[46.0569,14.5058]">Slovenia (Ljubljana)</option>
+      <option value="[40.4168,-3.7038]">Spain (Madrid)</option>
+      <option value="[59.3293,18.0686]">Sweden (Stockholm)</option>
+      <option value="[46.9480,7.4474]">Switzerland (Bern)</option>
+      <option value="[51.5074,-0.1278]">United Kingdom (London)</option>
+      <option value="[39.9334,32.8597]">Turkey (Ankara)</option>
+      <option value="[50.4501,30.5234]">Ukraine (Kyiv)</option>
+    </select>
+
+    <button id="getTimeBtn">☀️ Get Times</button>
+    <div id="result"></div>
+    <div class="note">Data accurate by <b>timeapi.io</b> & <b>sunrise-sunset.org</b>.</div>
+  </div>
+
+<script>
+document.getElementById("getTimeBtn").addEventListener("click", async () => {
+  const select = document.getElementById("countrySelect");
+  const val = select.value;
+  const resultEl = document.getElementById("result");
+
+  if (!val) {
+    alert("Please select a country or city");
+    return;
+  }
+
+  const [lat, lng] = JSON.parse(val);
+  resultEl.innerHTML = "☀️ Calculating sunlight...";
+
+  // Timezone lookup
+  const tzRes = await fetch(`https://timeapi.io/api/TimeZone/coordinate?latitude=${lat}&longitude=${lng}`);
+  const tzData = await tzRes.json();
+  const timeZone = tzData.timeZone || tzData.timeZoneId || tzData.timeZoneName || "UTC";
+
+  // Sunrise/sunset in UTC
+  const sunRes = await fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`);
+  const sunData = await sunRes.json();
+  const sunriseUTC = new Date(sunData.results.sunrise);
+  const sunsetUTC = new Date(sunData.results.sunset);
+
+  // Convert UTC → Local
+  const sunriseLocal = sunriseUTC.toLocaleTimeString("en-US", { timeZone, hour: "2-digit", minute: "2-digit" });
+  const sunsetLocal = sunsetUTC.toLocaleTimeString("en-US", { timeZone, hour: "2-digit", minute: "2-digit" });
+  const dateLocal = new Date().toLocaleDateString("en-US", { timeZone, weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  // Day length
+  const diffMs = sunsetUTC - sunriseUTC;
+  const diffH = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffM = Math.floor((diffMs / (1000 * 60)) % 60);
+
+  resultEl.innerHTML = `
+    📅 <b>${dateLocal}</b><br>
+    <span class="sun-icon">🌅</span> <b>Sunrise:</b> ${sunriseLocal}<br>
+    <span class="sun-icon">🌇</span> <b>Sunset:</b> ${sunsetLocal}<br>
+    🕒 <b>Day Length:</b> ${diffH}h ${diffM}m<br>
+    🕓 <small>Timezone: ${timeZone}</small>
+  `;
+});
+</script>
+</body>
+</html>
+

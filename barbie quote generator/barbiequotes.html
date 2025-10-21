@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barbie Quote Generator</title>
+  <style>
+    :root {
+      --pink-1: #ff66b2;
+      --pink-2: #ff2d95;
+      --bg: #ffdff0;
+      --accent: #ff4da6;
+      --text: #7a3b56;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(180deg, var(--bg), #ffe0f3 80%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: var(--pink-2);
+      font-size: 36px;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 2px #fff;
+    }
+    p {
+      font-size: 18px;
+      color: var(--text);
+      margin: 20px 0;
+      min-height: 60px;
+    }
+    button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    .quote-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(255, 77, 166, 0.2);
+      max-width: 500px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>💖 Barbie Quote Generator 💖</h1>
+  <div class="quote-box">
+    <p id="quote">Click the button to get your Barbie quote!</p>
+    <button onclick="generateQuote()">Get Quote</button>
+  </div>
+
+  <script>
+    const quotes = [
+      // All 100 quotes combined from your list
+      "Confidence is the best outfit—sparkle it up with kindness! – Barbie",
+      "Dream big, then dream even bigger. – Barbie",
+      "The best adventures start with a smile. – Barbie",
+      "When in doubt, add glitter. – Barbie",
+      "I don’t just want to live the dream—I want to build it! – Barbie",
+      "There’s nothing stronger than believing in yourself. – Barbie",
+      "Creativity is my favorite accessory. – Barbie",
+      "Kindness is the new pink. – Barbie",
+      "Every setback is just a runway for a comeback. – Barbie",
+      "The world is full of possibilities, and I’m ready for all of them! – Barbie",
+      "Why choose one passion when you can have them all? – Barbie",
+      "Leadership means listening first. – Barbie",
+      "I’ll always pick courage over perfection. – Barbie",
+      "Helping others shine makes my world brighter too. – Barbie",
+      "Sometimes, adventure is just a new way of seeing home. – Barbie",
+      "Every dream starts with a single step—and a fabulous pair of shoes. – Barbie",
+      "The best part of success is sharing it. – Barbie",
+      "Sometimes, the bravest thing you can do is just begin. – Barbie",
+      "Chasing dreams is easier with friends by your side. – Barbie",
+      "My diary is full of doodles, ideas, and a thousand what-ifs. – Barbie",
+      "Believe in magic, but don’t forget to believe in yourself too. – Barbie",
+      "A crown doesn’t make you a princess—kindness does. – Barbie",
+      "Life is like fashion: it’s better when you make it your own. – Barbie",
+      "Mistakes aren’t failures; they’re just sparkly detours. – Barbie",
+      "A smile is the best way to brighten any room. – Barbie",
+      "The only limit is how much glitter you can carry. – Barbie",
+      "The world needs more dreamers and doers—why not be both? – Barbie",
+      "Adventure is never out of style. – Barbie",
+      "I’ve learned that being yourself is the boldest look. – Barbie",
+      "Happiness is homemade—and accessorized. – Barbie",
+      "I may not have all the answers, but I’ve got snacks. – Ken",
+      "Barbie says I can do anything—so I’ll start with building her a smoothie stand! – Ken",
+      "Positivity looks good on everyone. – Ken",
+      "Sometimes, being the sidekick is the best role. – Ken",
+      "The world needs more laughter… and maybe more surfboards. – Ken",
+      "If it makes Barbie happy, I’m in. – Ken",
+      "It’s cool not to be perfect—because who is? – Ken",
+      "Good vibes are my favorite workout. – Ken",
+      "The best plans usually come with pizza. – Ken",
+      "Being supportive is my favorite hobby. – Ken",
+      "Sometimes I surprise even myself… usually with dance moves. – Ken",
+      "The best role model I have is Barbie. – Ken",
+      "Good friends are like surfboards—they help you ride the waves. – Ken",
+      "I’m not perfect, but I’ve perfected optimism. – Ken",
+      "I bring the fun, Barbie brings the fabulous. – Ken",
+      "I’m not bossy—I’m just always right! – Stacie",
+      "Adventure doesn’t wait, so why should I? – Stacie",
+      "Sports aren’t just games; they’re life lessons. – Stacie",
+      "Sometimes I trip, but at least I’m falling forward! – Stacie",
+      "Rules? I prefer challenges. – Stacie",
+      "You don’t need to be the tallest to stand out. – Stacie",
+      "I may be the middle sister, but I’ve got the biggest energy. – Stacie",
+      "Every day is a new scoreboard. – Stacie",
+      "Winning is fun, but learning is epic. – Stacie",
+      "You don’t need a map when you’ve got courage. – Stacie",
+      "Obstacles are just practice for champions. – Stacie",
+      "If I’m not moving, I’m not living. – Stacie",
+      "Adventure is my middle name… okay, not really, but it should be. – Stacie",
+      "Practice doesn’t make perfect—it makes awesome. – Stacie",
+      "Why wait for the future when you can race toward it? – Stacie",
+      "Even superheroes need snack breaks. – Stacie",
+      "I’m little, but my dreams are skyscraper tall. – Chelsea",
+      "Imagination is my superpower. – Chelsea",
+      "When you’re the youngest, you learn to be the funniest. – Chelsea",
+      "Tea parties solve almost everything. – Chelsea",
+      "Adventure is twice as fun with sprinkles. – Chelsea",
+      "Don’t underestimate me just because I’m small. – Chelsea",
+      "Big sisters give great advice… but sometimes I give better! – Chelsea",
+      "Dreaming is free, so I dream extra big. – Chelsea",
+      "If I can imagine it, I can build it. – Chelsea",
+      "Dreams taste better with sprinkles. – Chelsea",
+      "Being the youngest just means I get away with more fun! – Chelsea",
+      "Imagination is the best adventure ticket. – Chelsea",
+      "Fairytales are just blueprints for real dreams. – Chelsea",
+      "The sky isn’t the limit when you’ve got imagination. – Chelsea",
+      "Sometimes I think bigger than my shoes. – Chelsea",
+      "If music is the answer, I’m asking all the questions. – Skipper",
+      "Being myself is way cooler than being perfect. – Skipper",
+      "Sometimes I feel invisible—but that just means I can surprise people. – Skipper",
+      "Wi-Fi and family: two things I can’t live without. – Skipper",
+      "My playlist is basically my diary. – Skipper",
+      "Silence is golden, but music is everything. – Skipper",
+      "My dreams don’t have filters—they’re already in HD. – Skipper",
+      "Family arguments? I just turn up the volume. – Skipper",
+      "Sometimes I feel misunderstood, but that’s just part of my melody. – Skipper",
+      "Being different makes me authentic. – Skipper",
+      "I remix life one song at a time. – Skipper",
+      "Fashion is just another way to tell your story. – Nikki",
+      "True friends don’t compete—they collaborate. – Teresa",
+      "Life’s a stage, and I always want the spotlight. – Raquelle",
+      "Helping a friend shine is the best kind of glow-up. – Nikki",
+      "Adventures are better when shared. – Teresa",
+      "I don’t do drama… unless it’s fabulous. – Raquelle",
+      "Fashion is temporary, but friendship is timeless. – Nikki",
+      "Great ideas start with a little curiosity. – Teresa",
+      "If drama is an art, then call me the masterpiece. – Raquelle",
+      "True beauty is confidence with kindness. – Nikki",
+      "Good friends tell you the truth… fabulous friends tell you when your shoes don’t match. – Teresa",
+      "Spotlight or not, I’ll always shine. – Raquelle",
+      "The best team projects end with laughter. – Nikki"
+    ];
+
+    function generateQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      document.getElementById('quote').textContent = quotes[randomIndex];
+    }
+  </script>
+</body>
+</html>

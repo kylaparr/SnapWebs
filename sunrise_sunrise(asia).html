@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Asian Sunrise & Sunset Tracker ☀️</title>
+<style>
+  body {margin:0;height:100vh;display:flex;justify-content:center;align-items:center;
+        font-family:"Poppins",sans-serif;
+        background: linear-gradient(180deg,#ff9a9e,#fad0c4,#fbc2eb);animation:skyShift 12s ease-in-out infinite alternate;}
+  @keyframes skyShift{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+  .card{background: rgba(255,255,255,0.2);backdrop-filter:blur(8px);
+        padding:28px;border-radius:24px;text-align:center;color:#fff;max-width:600px;width:90%;
+        box-shadow:0 0 30px rgba(255,200,150,0.4);border:1px solid rgba(255,255,255,0.3);}
+  h2{font-size:1.8rem;margin-bottom:10px;text-shadow:0 0 8px rgba(255,255,255,0.8);}
+  select,button{padding:12px;border-radius:10px;border:none;font-size:1rem;}
+  select{width:100%;background:rgba(255,255,255,0.8);color:#333;}
+  button{margin-top:10px;width:100%;background:linear-gradient(90deg,#ff9966,#ff5e62);
+          color:white;font-weight:bold;cursor:pointer;transition:0.3s;}
+  button:hover{transform:scale(1.03);background:linear-gradient(90deg,#ff5e62,#ff9966);}
+  #result{margin-top:18px;font-size:1.1rem;line-height:1.6;
+          background:rgba(255,255,255,0.25);border-radius:14px;padding:12px;text-shadow:0 0 8px rgba(255,255,255,0.5);}
+  .note{margin-top:10px;font-size:0.9rem;color:#fff;opacity:0.8;}
+  .sun-icon{font-size:2rem;display:inline-block;animation:glow 2s infinite alternate;}
+  @keyframes glow{from{text-shadow:0 0 10px #fff,0 0 20px #ffcc00;}to{text-shadow:0 0 20px #ffcc00,0 0 30px #ffd966;}}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h2>🌅 Asian Sunrise & Sunset</h2>
+
+    <select id="countrySelect">
+      <option value="">-- Select Country (Major City) --</option>
+      <option value="[35.6895,139.6917]">Japan (Tokyo)</option>
+      <option value="[39.9042,116.4074]">China (Beijing)</option>
+      <option value="[28.6139,77.2090]">India (New Delhi)</option>
+      <option value="[1.3521,103.8198]">Singapore (Singapore)</option>
+      <option value="[3.1390,101.6869]">Malaysia (Kuala Lumpur)</option>
+      <option value="[13.7563,100.5018]">Thailand (Bangkok)</option>
+      <option value="[37.5665,126.9780]">South Korea (Seoul)</option>
+      <option value="[31.2304,121.4737]">China (Shanghai)</option>
+      <option value="[23.8103,90.4125]">Bangladesh (Dhaka)</option>
+      <option value="[19.0760,72.8777]">India (Mumbai)</option>
+      <option value="[33.6844,73.0479]">Pakistan (Islamabad)</option>
+      <option value="[6.5244,3.3792]">Nigeria (Lagos) <!-- skip Africa? yes --></option>
+      <option value="[12.9716,77.5946]">India (Bangalore)</option>
+      <option value="[30.0444,31.2357]">Egypt (Cairo) <!-- skip Africa? yes --></option>
+      <option value="[23.1291,113.2644]">China (Guangzhou)</option>
+      <option value="[31.7683,35.2137]">Israel (Jerusalem)</option>
+      <option value="[35.9078,127.7669]">South Korea (nationwide)</option>
+      <option value="[55.7558,37.6173]">Russia (Moscow) <!-- partial Europe/Asia --></option>
+      <option value="[14.5995,120.9842]">Philippines (Manila)</option>
+      <option value="[7.8731,80.7718]">Sri Lanka (Colombo)</option>
+      <option value="[40.4093,49.8671]">Azerbaijan (Baku)</option>
+      <option value="[38.9637,35.2433]">Turkey (Ankara)</option>
+      <option value="[34.5553,69.2075]">Afghanistan (Kabul)</option>
+      <option value="[32.4279,53.6880]">Iran (Tehran)</option>
+      <option value="[15.8700,100.9925]">Thailand (nationwide)</option>
+      <option value="[7.9465,98.3381]">Thailand (Phuket)</option>
+      <option value="[33.9391,67.7100]">Afghanistan (nationwide)</option>
+      <option value="[41.0082,28.9784]">Turkey (Istanbul)</option>
+      <option value="[36.2048,138.2529]">Japan (nationwide)</option>
+      <option value="[34.5553,69.2075]">Afghanistan (Kabul)</option>
+      <option value="[25.276987,55.296249]">UAE (Dubai)</option>
+      <option value="[23.8859,45.0792]">Saudi Arabia (Riyadh)</option>
+      <option value="[40.7128,74.0060]">Kuwait (Kuwait City)</option>
+      <option value="[38.9968,21.3990]">Lebanon (Beirut)</option>
+      <option value="[30.3753,69.3451]">Pakistan (nationwide)</option>
+      <option value="[39.9208,32.8541]">Turkey (Ankara)</option>
+      <option value="[27.7172,85.3240]">Nepal (Kathmandu)</option>
+      <option value="[38.0428,23.8050]">Greece (Athens) <!-- skip Europe? yes --></option>
+      <option value="[35.6528,51.4215]">Iran (Tehran)</option>
+      <option value="[31.9543,35.9122]">Jordan (Amman)</option>
+      <option value="[15.3547,44.2066]">Yemen (Sana’a)</option>
+      <option value="[33.2232,43.6793]">Iraq (Baghdad)</option>
+      <option value="[26.2440,50.5833]">Bahrain (Manama)</option>
+      <option value="[12.8797,121.7740]">Philippines (nationwide)</option>
+      <option value="[35.8617,104.1954]">China (nationwide)</option>
+      <option value="[36.2048,138.2529]">Japan (Tokyo)</option>
+      <option value="[39.0194,125.7543]">North Korea (Pyongyang)</option>
+      <option value="[19.9450,102.1350]">Laos (Vientiane)</option>
+      <option value="[15.8700,100.9925]">Thailand (Bangkok)</option>
+      <option value="[3.1390,101.6869]">Malaysia (Kuala Lumpur)</option>
+      <option value="[13.7563,100.5018]">Thailand (Bangkok)</option>
+    </select>
+
+    <button id="getTimeBtn">☀️ Get Times</button>
+    <div id="result"></div>
+    <div class="note">Data accurate by <b>timeapi.io</b> & <b>sunrise-sunset.org</b>.</div>
+  </div>
+
+<script>
+document.getElementById("getTimeBtn").addEventListener("click", async () => {
+  const select = document.getElementById("countrySelect");
+  const val = select.value;
+  const resultEl = document.getElementById("result");
+
+  if (!val) { alert("Select a country/city"); return; }
+  const [lat,lng] = JSON.parse(val);
+  resultEl.innerHTML = "☀️ Calculating sunlight...";
+
+  const tzRes = await fetch(`https://timeapi.io/api/TimeZone/coordinate?latitude=${lat}&longitude=${lng}`);
+  const tzData = await tzRes.json();
+  const timeZone = tzData.timeZone || tzData.timeZoneId || tzData.timeZoneName || "UTC";
+
+  const sunRes = await fetch(`https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`);
+  const sunData = await sunRes.json();
+  const sunriseUTC = new Date(sunData.results.sunrise);
+  const sunsetUTC = new Date(sunData.results.sunset);
+
+  const sunriseLocal = sunriseUTC.toLocaleTimeString("en-US",{timeZone,hour:"2-digit",minute:"2-digit"});
+  const sunsetLocal = sunsetUTC.toLocaleTimeString("en-US",{timeZone,hour:"2-digit",minute:"2-digit"});
+  const dateLocal = new Date().toLocaleDateString("en-US",{timeZone,weekday:"long",year:"numeric",month:"long",day:"numeric"});
+
+  const diffMs = sunsetUTC-sunriseUTC;
+  const diffH = Math.floor(diffMs/(1000*60*60));
+  const diffM = Math.floor((diffMs/ (1000*60)) % 60);
+
+  resultEl.innerHTML = `
+    📅 <b>${dateLocal}</b><br>
+    <span class="sun-icon">🌅</span> <b>Sunrise:</b> ${sunriseLocal}<br>
+    <span class="sun-icon">🌇</span> <b>Sunset:</b> ${sunsetLocal}<br>
+    🕒 <b>Day Length:</b> ${diffH}h ${diffM}m<br>
+    🕓 <small>Timezone: ${timeZone}</small>
+  `;
+});
+</script>
+</body>
+</html>
