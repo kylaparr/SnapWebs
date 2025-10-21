@@ -8,7 +8,7 @@ A collection of lightweight, single-purpose websites you can use instantly.
 
 Calorie Tracker – Easily track your daily intake.
 
-Notepad – Quickly jot down notes online.
+Notepad – Take notes instantly.
 
 Quote Generator – Receive a random motivational quote.
 
